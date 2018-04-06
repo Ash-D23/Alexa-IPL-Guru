@@ -5,10 +5,11 @@ const Alexa = require('alexa-sdk');
 
 const SKILL_NAME = 'IPL Guru';
 const GET_FACT_MESSAGE = "Here's your ipl fact: ";
-const HELP_MESSAGE = 'You can say tell me a ipl fact, or, you can say exit... What can I help you with?';
+const HELP_MESSAGE = 'You can say tell me a ipl fact, or, you can say stop... What can I help you with?';
 const HELP_REPROMPT = 'What can I help you with?';
 const STOP_MESSAGE = 'Goodbye!';
 const ipl ='The Indian Premier League (IPL), officially Vivo Indian Premier League for sponsorship reasons, is a professional Twenty20 cricket league in India contested during April and May of every year by teams representing Indian cities.';
+const cont = ' . Do you want to ask me anything else ... or should I stop ?';
 
 function seasonwinner(svalue){
     if(svalue==1){
@@ -105,14 +106,14 @@ const handlers = {
         const speechOutput = GET_FACT_MESSAGE + randomFact;
 
         this.response.cardRenderer(SKILL_NAME, randomFact);
-        this.emit(':ask', speechOutput);
+        this.emit(':ask', speechOutput + cont);
     },
     'iplFinalWinner': function(){
         var season = this.event.request.intent.slots.season.value;
         var swinner = seasonwinner(season);
         
         if(swinner!='null'){
-        this.emit(':ask','ipl season '+ season + ' was won by '+ swinner);
+        this.emit(':ask','ipl season '+ season + ' was won by '+ swinner + cont);
         }
         else{
         this.response.speak('wrong query');
@@ -124,7 +125,7 @@ const handlers = {
         var squad = iplteam(team.toLowerCase());
         
         if(squad!='null'){
-         this.emit(':ask',team + ' squad consists of '+ squad );
+         this.emit(':ask',team + ' squad consists of '+ squad + cont);
         }
         else{
         this.response.speak('wrong query');
@@ -135,13 +136,13 @@ const handlers = {
       this.emit(':ask', ipl );
     },
     'topRunScorer': function(){
-       this.emit(':ask','Suresh Raina is the leading run scorer of ipl with 4540 runs in 157 innings');
+       this.emit(':ask','Suresh Raina is the leading run scorer of ipl with 4540 runs in 157 innings' + cont);
     },
     'topWicketTaker': function(){
-       this.emit(':ask','Lasith Malinga with 154 wickets is the leading wicket taker of ipl');
+       this.emit(':ask','Lasith Malinga with 154 wickets is the leading wicket taker of ipl' + cont);
     },
     'bestTeam': function(){
-      this.emit(':ask','Mumbai Indians with 3 IPL titles is the most successfull team of ipl');
+      this.emit(':ask','Mumbai Indians with 3 IPL titles is the most successfull team of ipl' + cont);
     },
     'AMAZON.HelpIntent': function () {
         const speechOutput = HELP_MESSAGE;
@@ -157,7 +158,8 @@ const handlers = {
     'AMAZON.StopIntent': function () {
         this.response.speak(STOP_MESSAGE);
         this.emit(':responseReady');
-    },
+    }
+    
 };
 
 exports.handler = function (event, context, callback) {
