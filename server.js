@@ -97,7 +97,7 @@ const data = [
 
 const handlers = {
     'LaunchRequest': function () {
-       this.emit(':ask', 'Hello I am IPL Guru, What would you like me to do? . and if you want me to stop at any time jus say stop');
+       this.emit(':ask', 'Hello I am IPL Guru, What would you like me to do? . and if you want me to stop at any time just say stop');
     },
     'randomfact': function () {
         const factArr = data;
@@ -110,6 +110,10 @@ const handlers = {
     },
     'iplFinalWinner': function(){
         var season = this.event.request.intent.slots.season.value;
+        
+        if( this.event.request.intent.slots.season.value!=null){
+            
+        
         var swinner = seasonwinner(season);
         
         if(swinner!='null'){
@@ -119,9 +123,17 @@ const handlers = {
         this.response.speak('wrong query');
         this.emit(':responseReady');
         }
+        
+        }
+        else{
+           this.response.speak('sorry i did not get the season number, please try again');
+        this.emit(':responseReady'); 
+        }
     },
     'iplTeam': function(){
         var team = this.event.request.intent.slots.iplseasonTeam.value;
+        
+        if(this.event.request.intent.slots.iplseasonTeam.value!=null){
         var squad = iplteam(team.toLowerCase());
         
         if(squad!='null'){
@@ -131,6 +143,13 @@ const handlers = {
         this.response.speak('wrong query');
         this.emit(':responseReady');
         }
+        
+        }
+        else{
+             this.response.speak('sorry i did not get the team name .. please try again');
+        this.emit(':responseReady');
+        }
+        
     },
     'iplDefinitionIntent': function(){
       this.emit(':ask', ipl );
@@ -143,6 +162,10 @@ const handlers = {
     },
     'bestTeam': function(){
       this.emit(':ask','Mumbai Indians with 3 IPL titles is the most successfull team of ipl' + cont);
+    },
+     'closeintent': function(){
+      this.response.speak('Thank you bye !!');
+        this.emit(':responseReady');
     },
     'AMAZON.HelpIntent': function () {
         const speechOutput = HELP_MESSAGE;
@@ -158,7 +181,7 @@ const handlers = {
     'AMAZON.StopIntent': function () {
         this.response.speak(STOP_MESSAGE);
         this.emit(':responseReady');
-    }
+    },
     
 };
 
